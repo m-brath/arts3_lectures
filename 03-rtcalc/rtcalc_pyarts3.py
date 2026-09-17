@@ -17,12 +17,13 @@ def tags2tex(tags):
 
 
 def species_from_tags(tags):
-    """Map the lecture's species tags to ARTS3 absorption species.
+    """Translate the lecture species tags to ARTS3 absorption species.
 
-    ARTS3's line-by-line models are named per absorption model (e.g.
-    ``H2O-PWR2022``), so the plain legacy tags are translated here.  N2 does
-    not contribute its own lines in this range (it only acts as a pressure
-    partner in the line-broadening), so it is ignored by the LBL calculation.
+    ARTS3 resolves bare element tags (``H2O``, ``O2``, ``N2``) to the
+    ``lines/`` family in  ``arts - cat - data - trunk``, matching the
+    ``ReadSpeciesSplitCatalog(basename="lines/")``  bundle that the  2.6
+    lecture uses.  The  ``-PWR2022`` /  ``-CKDMT``  suffixed tags are
+    separate, much heavier, line sets that are NOT  the  2.6 reference data.
 
     Parameters:
         tags (list[str]): Lecture species tags (e.g. ``["N2", "O2", "H2O"]``).
@@ -30,17 +31,14 @@ def species_from_tags(tags):
     Returns:
         list[str]: ARTS3 absorption species tags.
     """
-    mapping = {
-        "H2O": "H2O-PWR2022",
-        "O2": "O2-PWR2022",
-    }
+    allowed = {"H2O", "O2", "N2"}
     arts = []
     for tag in tags:
         base = tag.split("-")[0]
-        if base in mapping and mapping[base] not in arts:
-            arts.append(mapping[base])
+        if base in allowed and base not in arts:
+            arts.append(base)
     if not arts:
-        raise ValueError(f"No ARTS3 LBL species for input tags {tags}")
+        raise ValueError(f"No ARTS3 species for input tags {tags}")
     return arts
 
 
