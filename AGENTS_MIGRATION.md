@@ -8,7 +8,17 @@ The goal is to migrate Python exercises from the legacy `pyarts` framework to th
 
 **IMPORTANT:** Every exercise includes a Jupyter Notebook (`.ipynb`). The notebook is the primary interface for students during lectures. **The migration of the notebook is a critical part of the task and must be completed alongside the Python scripts.**
 
-## 2. Standard Operating Procedure (SOP)
+## 2. Python Environment
+
+The project's Python environment is the **mamba env `srs-ws-2026`** (located at `~/miniforge3/envs/srs-ws-2026`). Always use this environment when running or testing code in this repository:
+
+- **Run scripts with:** `mamba run -n srs-ws-2026 python <file>.py`
+- **Jupyter notebooks** must use the kernel from this environment (it contains `pyarts3`, `numpy`, and `matplotlib`).
+- Do **not** use the `base`, `pyarts`, or any other environment.
+
+The legacy **ARTS 2.6 lectures** (the migration source, using `pyarts` 2.6) are located one level above this project, at `../arts2.6-lectures/` (i.e. `/Users/u242031/projekte/arts_dev/arts2.6-lectures/`). The legacy exercises to be ported live in `../arts2.6-lectures/exercises/`.
+
+## 3. Standard Operating Procedure (SOP)
 
 ### Step 1: Analysis
 - Identify all `import pyarts` or `import pyarts.xxx` statements.
@@ -72,7 +82,7 @@ freq               = np.asarray(ws.freq_grid)
 - If the result is a workspace variable, access the raw array using `.value`.
 - For recipes, the return value is typically a `numpy.ndarray` directly.
 
-## 3. Known Pitfalls (DO NOT IGNORE)
+## 4. Known Pitfalls (DO NOT IGNORE)
 
 | Problem | Cause | Fix |
 | :--- | :--- | :--- |
@@ -82,11 +92,11 @@ freq               = np.asarray(ws.freq_grid)
 | **RuntimeError (XML parse error)** | Missing or malformed catalog files in `lines/`. | Ensure `pa.data.download()` is called and directories are correctly linked. |
 | **No isolated peak / `linewidth()` fails** | Line is buried under the (self-/cross-) continuum, or the line is broad and the frequency window is too narrow. | For line-shape/FWHM studies use the Voigt-only LBL path (no `spectral_propmatAddPredefined`/`AddCIA`), and widen the frequency window so the half-maximum level crosses the baseline. |
 
-## 4. Verification Protocol
+## 5. Verification Protocol
 
 Every migrated script must pass this test sequence:
-1.  **Syntax Check:** `python -m py_compile <file>.py`
-2.  **Functional Test:** Run the script in a standard environment.
+1.  **Syntax Check:** `mamba run -n srs-ws-2026 python -m py_compile <file>.py`
+2.  **Functional Test:** Run the script in the `srs-ws-2026` mamba environment.
 3.  **Notebook Check:** Ensure the `.ipynb` file correctly imports the ported `.py` module and the calculation executes without error.
 4.  **Success Criteria:** 
     - Script completes without `RuntimeError`.
