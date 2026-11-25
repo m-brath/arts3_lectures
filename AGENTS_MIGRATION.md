@@ -10,11 +10,11 @@ The goal is to migrate Python exercises from the legacy `pyarts` framework to th
 
 ## 2. Python Environment
 
-The project's Python environment is the **mamba env `srs-ws-2026`** (located at `~/miniforge3/envs/srs-ws-2026`). Always use this environment when running or testing code in this repository:
+The project's Python environment is the **mamba env `srs`**. It contains both the legacy `pyarts` 2.6 package and the target `pyarts3` package. Always use this environment when running or testing code in this repository, including legacy source exercises:
 
-- **Run scripts with:** `mamba run -n srs-ws-2026 python <file>.py`
+- **Run scripts with:** `mamba run -n srs python <file>.py`
 - **Jupyter notebooks** must use the kernel from this environment (it contains `pyarts3`, `numpy`, and `matplotlib`).
-- Do **not** use the `base`, `pyarts`, or any other environment.
+- Do **not** use `base` or any other environment, including a separate legacy `pyarts` environment.
 
 The legacy **ARTS 2.6 lectures** (the migration source, using `pyarts` 2.6) are located one level above this project, at `../arts2.6-lectures/` (i.e. `/Users/u242031/projekte/arts_dev/arts2.6-lectures/`). The legacy exercises to be ported live in `../arts2.6-lectures/exercises/`.
 
@@ -95,8 +95,8 @@ freq               = np.asarray(ws.freq_grid)
 ## 5. Verification Protocol
 
 Every migrated script must pass this test sequence:
-1.  **Syntax Check:** `mamba run -n srs-ws-2026 python -m py_compile <file>.py`
-2.  **Functional Test:** Run the script in the `srs-ws-2026` mamba environment.
+1.  **Syntax Check:** `mamba run -n srs python -m py_compile <file>.py`
+2.  **Functional Test:** Run the script in the `srs` mamba environment.
 3.  **Notebook Check:** Ensure the `.ipynb` file correctly imports the ported `.py` module and the calculation executes without error.
 4.  **Success Criteria:** 
     - Script completes without `RuntimeError`.
